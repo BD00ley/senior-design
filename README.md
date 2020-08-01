@@ -1,2 +1,2 @@
 # senior-design
-one file of my senior design for version control
+the one file of my senior design for version control lol
