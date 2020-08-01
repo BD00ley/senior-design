@@ -69,25 +69,6 @@ bool target_position(int fd, uint8_t address, int32_t target) {
   }
   return EXIT_SUCCESS;
 }
- 
-// Gets one or more variables from the Tic (without clearing them).
-//bool get_variable(int fd, uint8_t address, uint8_t offset, uint8_t* buffer, uint8_t length) {
-//  uint8_t command[] = { 
-//    0xA1, 
-//    offset 
-//  };
-//  struct i2c_msg messages[] = {
-//    { address, 0, sizeof(command), command },
-//    { address, I2C_M_RD, length, buffer },
-//  };
-//  struct i2c_rdwr_ioctl_data ioctl_data = { &messages, 2 };
-//  int result = ioctl(fd, I2C_RDWR, &ioctl_data);
-//  if (result != 2) {
-//    perror("failed to get variables");
-//    return EXIT_FAILURE;
-//  }
-//  return EXIT_SUCCESS;
-//}
 
 // Energize the motor
 bool energize(int fd, uint8_t address) {
@@ -126,7 +107,6 @@ int main(int argc, char* argv[argc+1]) {
 
   //Assign the terminal command and i2c address 
   const char* cmd = argv[1];
-  const uint8_t address = strtol(argv[2], NULL, 10);
 
   //I2C device of the raspberry pi (GPIO2 & GPIO3).
   const char* device = "/dev/i2c-1";
@@ -137,7 +117,8 @@ int main(int argc, char* argv[argc+1]) {
  
   bool result = false;
 
-  if (!strcmp(cmd, "--energize")) {
+  if (strcmp(cmd, "--energize") == 0) {
+    const uint8_t address = strtol(argv[2], NULL, 10);
     result = exit_safe_start(fd, address);
 
     //Note the conditionals for result check if 
@@ -151,7 +132,8 @@ int main(int argc, char* argv[argc+1]) {
       return EXIT_FAILURE;
     printf("Motor energized.\n");
   }
-  else if (!strcmp(cmd, "--de-energize")) {
+  else if (strcmp(cmd, "--de-energize") == 0) {
+    const uint8_t address = strtol(argv[2], NULL, 10);
     result = exit_safe_start(fd, address);
     if (result)
       return EXIT_FAILURE;
@@ -163,7 +145,8 @@ int main(int argc, char* argv[argc+1]) {
       return EXIT_FAILURE;
     printf("Motor de-energized.\n");
   }
-  else if (!strcmp(cmd, "--set-position")) {
+  else if (strcmp(cmd, "--set-position") == 0) {
+      const uint8_t address = strtol(argv[2], NULL, 10);
       result = exit_safe_start(fd, address);
       if (result) 
         return EXIT_FAILURE;
@@ -176,8 +159,9 @@ int main(int argc, char* argv[argc+1]) {
           return EXIT_FAILURE;
       printf("Position set.\n");
   }
-  else if (!strcmp(cmd, "--help")) {
+  else if (strcmp(cmd, "--help") == 0) {
     print_cmds();
+    return EXIT_SUCCESS;
   }
   else
   {
