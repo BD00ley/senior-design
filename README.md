@@ -1,2 +1,2 @@
 # senior-design
-the one file of my senior design for version control lol
+The front end and backend files of I2C communication on the Raspberry Pi for my senior design.
