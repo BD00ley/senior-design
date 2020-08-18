@@ -1,7 +1,9 @@
 // Author: Bradley Dooley, USF EE.
 // Uses the Linux kernel to send and receive data from a Tic.
 // See https://www.kernel.org/doc/Documentation/i2c/dev-interface for
-// more information.
+// more information on the ioctrl.
+// See https://docs.rtems.org/doxygen/branches/master/structi2c__msg.html#a8633f67b7fb7d6e4b4389d8a5b999e5f
+// for information on the messages.
 
 #include <fcntl.h>
 #include <unistd.h>
@@ -18,7 +20,7 @@
 // For example, the default addresses are 11, 12, 13, 14, 15, 16.
 #define addr_top 16
 #define addr_bottom 11
-
+#define NO_FLAGS 0
   //Structure of using io control in linux for reference.
 
 // ioctl(file, I2C_RDWR, struct i2c_rdwr_ioctl_data *msgset)
@@ -32,9 +34,11 @@
 // }
 //
 
+// struct i2c_msg { uint16_t addr, uint16_t flags, uint16_t len, uint8_t * buf }
+
 // Opens the specified I2C device.
 int open_device(const char* device) {
-  int fd = open(device, O_RDWR); //Open as given in fcntl.h
+  int fd = open(device, O_RDWR);
   if (fd == -1) {
     perror(device);
 		return -1;
@@ -42,13 +46,13 @@ int open_device(const char* device) {
   return fd;
 } 
 
-// Sends the "Exit safe start" command.
-bool exit_safe_start(int fd, uint8_t address) {
+// Sends the exit safe start command.
+bool exit_safe_start(int fd, uint16_t address) {
   uint8_t command[] = { 0x83 };
-  struct i2c_msg message = { address, 0, sizeof(command), command };
+  struct i2c_msg message = { address, NO_FLAGS, sizeof(command), command };
   struct i2c_rdwr_ioctl_data ioctl_data = { &message, 1 }; 
   int result = ioctl(fd, I2C_RDWR, &ioctl_data);
-  if (result != 1) {
+  if (result == -1) {
     perror("failed to exit safe start");
     return EXIT_FAILURE;
   }
@@ -56,18 +60,18 @@ bool exit_safe_start(int fd, uint8_t address) {
 }
  
 // Sets the target position
-bool set_position(int fd, uint8_t address, int32_t target) {
+bool set_position(int fd, uint16_t address, int32_t target) {
   uint8_t command[] = {
     0xE0,
-    (uint8_t)(target >> 0  & 0xFF),		//Split 32 bit register into four bytes
+    (uint8_t)(target >> 0  & 0xFF),		//Four bytes of info sent (position is 32 bits)
     (uint8_t)(target >> 8  & 0xFF),
     (uint8_t)(target >> 16 & 0xFF),
     (uint8_t)(target >> 24 & 0xFF)
   };
-  struct i2c_msg message = { address, 0, sizeof(command), command };
+  struct i2c_msg message = { address, NO_FLAGS, sizeof(command), command };
   struct i2c_rdwr_ioctl_data ioctl_data = { &message, 1 };
   int result = ioctl(fd, I2C_RDWR, &ioctl_data);
-  if (result != 1) {
+  if (result == -1) {
     perror("failed to set target position");
     return EXIT_FAILURE;
   }
@@ -75,12 +79,12 @@ bool set_position(int fd, uint8_t address, int32_t target) {
 }
 
 // Energize the motor
-bool energize(int fd, uint8_t address) {
+bool energize(int fd, uint16_t address) {
   uint8_t command[] ={ 0x85 };
-  struct i2c_msg message = { address, 0, sizeof(command), command };
+  struct i2c_msg message = { address, NO_FLAGS, sizeof(command), command };
   struct i2c_rdwr_ioctl_data ioctl_data = { &message, 1 }; 
   int result = ioctl(fd, I2C_RDWR, &ioctl_data);
-  if (result != 1) {
+  if (result == -1) {
     perror("failed to energize");
     return EXIT_FAILURE;
   }
@@ -88,12 +92,12 @@ bool energize(int fd, uint8_t address) {
 }
 
 // De-energize the motor
-bool de_energize(int fd, uint8_t address) {
+bool de_energize(int fd, uint16_t address) {
   uint8_t command[] ={ 0x86 };
-  struct i2c_msg message = { address, 0, sizeof(command), command };
+  struct i2c_msg message = { address, NO_FLAGS, sizeof(command), command };
   struct i2c_rdwr_ioctl_data ioctl_data = { &message, 1 }; 
   int result = ioctl(fd, I2C_RDWR, &ioctl_data);
-  if (result != 1) {
+  if (result == -1) {
     perror("failed to de-energize");
     return EXIT_FAILURE;
   }
@@ -124,7 +128,7 @@ int main(int argc, char* argv[argc+1]) {
   bool result = false;
 
   if (strcmp(cmd, "--energize") == 0) {
-    const uint8_t address = strtol(argv[2], NULL, 10);
+    const uint16_t address = strtol(argv[2], NULL, 10);
     result = exit_safe_start(fd, address);
 
     //Note the conditionals for result check if 
@@ -139,7 +143,7 @@ int main(int argc, char* argv[argc+1]) {
     printf("Motor energized.\n");
   }
   else if (strcmp(cmd, "--de-energize") == 0) {
-    const uint8_t address = strtol(argv[2], NULL, 10);
+    const uint16_t address = strtol(argv[2], NULL, 10);
     result = exit_safe_start(fd, address);
     if (result)
       return EXIT_FAILURE;
@@ -182,7 +186,7 @@ int main(int argc, char* argv[argc+1]) {
       return EXIT_SUCCESS;
   }
   else if (strcmp(cmd, "--set-position") == 0) {
-      const uint8_t address = strtol(argv[2], NULL, 10);
+      const uint16_t address = strtol(argv[2], NULL, 10);
       result = exit_safe_start(fd, address);
       if (result) 
         return EXIT_FAILURE;
