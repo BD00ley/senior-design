@@ -1,6 +1,7 @@
 import sys, getopt
 from subprocess import call
 
+def 
 base_addr = 16
 shoulder_addr = 15
 elbow_addr = 14
@@ -9,10 +10,9 @@ middlew_addr = 12
 outerw_addr = 11
 
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "hadb:s:e:i:m:o:", ["help","energize", "de-energize", "base=","shoulder=", "elbow=", "innerw=", "middlew", "outerw"])
+    opts, args = getopt.getopt(sys.argv[1:], "hb:s:e:i:m:o:", ["help","energize", "de-energize", "base=","shoulder=", "elbow=", "innerw=", "middlew", "outerw"])
     for opt, arg in opts: 
         if opt in  ("-h", "--help"):
-            print ("-a, --energize\t Energize the robot")
             print ("-b, --base\t Set the base position")
             print ("-s, --shoulder\t Set the shoulder position")
             print ("-e, --elbow\t Set the elbow position")
