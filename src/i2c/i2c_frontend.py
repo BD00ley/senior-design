@@ -1,7 +1,6 @@
 import sys, getopt
 from subprocess import call
 
-def 
 base_addr = 16
 shoulder_addr = 15
 elbow_addr = 14
