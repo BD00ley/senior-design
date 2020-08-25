@@ -128,7 +128,7 @@ int main(int argc, char* argv[argc+1]) {
   bool result = false;
 
   if (strcmp(cmd, "--energize") == 0) {
-    const uint16_t address = strtol(argv[2], NULL, 10);
+    const uint16_t address = (uint16_t)atoi(argv[2]);
     result = exit_safe_start(fd, address);
 
     //Note the conditionals for result check if 
@@ -143,7 +143,7 @@ int main(int argc, char* argv[argc+1]) {
     printf("Motor energized.\n");
   }
   else if (strcmp(cmd, "--de-energize") == 0) {
-    const uint16_t address = strtol(argv[2], NULL, 10);
+    const uint16_t address = (uint16_t)atoi(argv[2]);
     result = exit_safe_start(fd, address);
     if (result)
       return EXIT_FAILURE;
@@ -186,13 +186,13 @@ int main(int argc, char* argv[argc+1]) {
       return EXIT_SUCCESS;
   }
   else if (strcmp(cmd, "--set-position") == 0) {
-      const uint16_t address = strtol(argv[2], NULL, 10);
+      const uint16_t address = (uint16_t)atoi(argv[2]);
       result = exit_safe_start(fd, address);
       if (result) 
         return EXIT_FAILURE;
 
       // Get the desired position value 
-      int32_t position = strtol(argv[3], NULL, 10);
+      int32_t position = (int32_t)atoi(argv[3]);
       printf("Setting target position to %d.\n", position);
       result = set_position(fd, address, position);
         if (result) 
