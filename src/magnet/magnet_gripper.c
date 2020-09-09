@@ -12,7 +12,7 @@
 #define MPIN RPI_BPLUS_GPIO_J8_15  //Pin 15 on J8 header = GPIO22 = GPIO_GEN3 on RPi
 int main(int argc, char* argv[argc+1]) {
 
-if(argc > 1) {
+if(argc > 2) {
     printf("Too many arguments.\n");
     return EXIT_FAILURE;
 }
