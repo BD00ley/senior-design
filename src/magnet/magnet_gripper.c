@@ -8,7 +8,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-#define MPIN RPI_BPLUS_GPIP_J8_15  //Pin 15 on J8 header = GPIO22 = GPIO_GEN3 on RPi
+#define MPIN RPI_BPLUS_GPIO_J8_15  //Pin 15 on J8 header = GPIO22 = GPIO_GEN3 on RPi
 int main(int argc, char* argv[argc+1]) {
 
 if(argc > 1) {
@@ -29,11 +29,11 @@ if(strcmp(cmd, "--on")) {
 }
 else if (strcmp(cmd,"--off")) {
      bcm2835_gpio_write(MPIN, LOW);
-     printf("Magnetic gripper de-energized.\n")
+     printf("Magnetic gripper de-energized.\n");
 }
 else
 {
-    printf("Unknown command. Use --on or -off for magnet gripper control.\n")
+    printf("Unknown command. Use --on or -off for magnet gripper control.\n");
 }
 
 return EXIT_SUCCESS; 
