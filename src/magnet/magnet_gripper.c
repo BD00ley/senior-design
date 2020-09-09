@@ -25,9 +25,11 @@ if(!bcm2835_init()){
 bcm2835_gpio_fsel(MPIN, BCM2835_GPIO_FSEL_OUTP);
 if(strcmp(cmd, "--on")) {
     bcm2835_gpio_write(MPIN, HIGH);
+    printf("Magnetic gripper energized.\n");
 }
 else if (strcmp(cmd,"--off")) {
      bcm2835_gpio_write(MPIN, LOW);
+     printf("Magnetic gripper de-energized.\n")
 }
 else
 {
