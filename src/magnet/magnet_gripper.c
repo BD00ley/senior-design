@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <bcm2835.h>
 #include <stdint.h>
+#include <string.h>
 #include <stdlib.h>
 
 #define MPIN RPI_BPLUS_GPIO_J8_15  //Pin 15 on J8 header = GPIO22 = GPIO_GEN3 on RPi
