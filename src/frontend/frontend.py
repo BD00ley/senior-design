@@ -9,7 +9,7 @@ middlew_addr = 12
 outerw_addr = 11
 
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "hb:s:e:i:m:o:m:g:r", ["help", "base=","shoulder=", "elbow=", "innerw=", "middlew", "outerw"])
+    opts, args = getopt.getopt(sys.argv[1:], "hb:s:e:i:m:o:m:gr", ["help", "base=","shoulder=", "elbow=", "innerw=", "middlew", "outerw"])
     for opt, arg in opts: 
         if opt in  ("-h", "--help"):
             print ("-b, --base\t Set the base position")
@@ -46,9 +46,9 @@ try:
             print("Outer wrist position: ", outer_wristpos)
             call(["./i2c_backend", "--set-position", str(outerw_addr), str(outer_wristpos)])
         elif opt in ("-g", "--grip"):
-            call(["./magnetic_gripper", "--on"])
+            call(["./magnet_gripper", "--on"])
         elif opt in ("-r", "--release"):
-            call(["./magnetic_gripper", "--off"])
+            call(["./magnet_gripper", "--off"])
 except getopt.GetoptError:
     print('Unrecognized command or invalid command. Type -h or --help for command info.')
     sys.exit(2)
