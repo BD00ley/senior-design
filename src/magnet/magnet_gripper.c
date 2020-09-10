@@ -32,8 +32,7 @@ else if (strcmp(cmd,"--off") == 0) {
      bcm2835_gpio_write(MPIN, LOW);
      printf("Magnetic gripper de-energized.\n");
 }
-else
-{
+else {
     printf("Unknown command. Use --on or -off for magnet gripper control.\n");
 }
 
