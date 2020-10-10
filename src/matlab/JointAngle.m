@@ -7,6 +7,5 @@ system(RPI, char("cd ~/Desktop/senior-design/test_runs; ./i2c_backend " + "--set
 system(RPI, char("cd ~/Desktop/senior-design/test_runs; ./i2c_backend " + "--set-position " + "13 " + inner_wrist_angle));
 system(RPI, char("cd ~/Desktop/senior-design/test_runs; ./i2c_backend " + "--set-position " + "12 " + middle_wrist_angle));
 system(RPI, char("cd ~/Desktop/senior-design/test_runs; ./i2c_backend " + "--set-position " + "11 " + outer_wrist_angle));
-
 end
 
