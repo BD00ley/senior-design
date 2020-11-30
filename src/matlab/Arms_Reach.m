@@ -140,18 +140,18 @@ classdef Arms_Reach < matlab.apps.AppBase
             
             %% Zero out Simulation
             app.base_angle = 0;
-            app.shoulder_angle = 0;
-            app.elbow_angle = 0;
+            app.shoulder_angle = 134;
+            app.elbow_angle = -47;
             app.inner_wrist_angle = 0;
             app.middle_wrist_angle = 0;
-            app.outer_wrist_angle = 0;
+            app.outer_wrist_angle = 60;
             
             app.base = 0;
-            app.shoulder = 90;
-            app.elbow = 0;
+            app.shoulder = 134;
+            app.elbow = -47;
             app.inner_wrist = 0;
             app.middle_wrist = 0;
-            app.outer_wrist = 0;
+            app.outer_wrist = 60;
             
             assignin("base",'base',app.base);
             set_param('sixDOF_model3/Angle Offset Correction/base', 'Value', num2str(app.base));
@@ -209,6 +209,7 @@ classdef Arms_Reach < matlab.apps.AppBase
         function SwitchValueChanged(app, event)
             value = app.Switch.Value;
             ArmStateAll(evalin('base', 'RPI'), value);
+            MagnetState(evalin('base', 'RPI'), value);
             if strcmp(value, 'on')
                 app.LinkLamp.Color = 'g';
             else
@@ -278,26 +279,6 @@ classdef Arms_Reach < matlab.apps.AppBase
             if app.outer_wrist > 360
                 app.outer_wrist = app.outer_wrist - 360;
             end
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%           
-            assignin("base",'base',app.base);
-            set_param('sixDOF_model3/Angle Offset Correction/base', 'Value', num2str(app.base));
-            assignin("base",'shoulder',app.shoulder);
-            set_param('sixDOF_model3/Angle Offset Correction/shoulder', 'Value', num2str(app.shoulder));
-            assignin("base",'elbow',app.elbow);
-            set_param('sixDOF_model3/Angle Offset Correction/elbow', 'Value', num2str(app.elbow));
-            assignin("base",'inner_wrist',app.inner_wrist);
-            set_param('sixDOF_model3/Angle Offset Correction/inner_wrist', 'Value', num2str(app.inner_wrist));
-            assignin("base",'middle_wrist',app.middle_wrist);
-            set_param('sixDOF_model3/Angle Offset Correction/middle_wrist', 'Value', num2str(app.middle_wrist));
-            assignin("base",'outer_wrist',app.outer_wrist);
-            set_param('sixDOF_model3/Angle Offset Correction/outer_wrist', 'Value', num2str(app.outer_wrist));
-            
-            app.base_angle = 0;
-            app.shoulder_angle = 0;
-            app.elbow_angle = 0;
-            app.inner_wrist_angle = 0;
-            app.middle_wrist_angle = 0;
-            app.outer_wrist_angle = 0;
             
             assignin("base",'base_angle',app.base_angle);
             set_param('sixDOF_model3/Angle Offset Correction/base_angle', 'Value', num2str(app.base_angle));
